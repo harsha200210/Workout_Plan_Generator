@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gym Places</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Full-screen image */
+        .header-container {
+            position: relative;
+            width: 100%;
+            height: 50vh; /* Full height of the viewport */
+            background: url('assets/image/gym.jpg') no-repeat center center/cover;
+        }
+
+        /* Overlay (Optional: For better readability) */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay effect */
+        }
+
+        /* Table section */
+        .table-container {
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">TRAINING <span class="text-danger">STUDIO</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="schedules.html">Schedules</a></li>
+                <li class="nav-item"><a class="nav-link" href="trainers.html">Trainers</a></li>
+                <li class="nav-item"><a class="nav-link" href="places.html">Places</a></li>
+                <li class="nav-item"><a class="nav-link" href="mealPlan.html">Meal Plan</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                <li class="nav-item" id="loginBtn"><a class="btn btn-outline-light me-2" href="login.html">Login</a></li>
+                <li class="nav-item" id="signupBtn"><a class="btn btn-danger" href="signup.html">Sign Up</a></li>
+                <li class="nav-item" id="logoutBtn"><a class="btn btn-danger" href="index.html">Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Fullscreen Header Image -->
+<div class="header-container">
+    <div class="overlay"></div> <!-- Optional dark overlay -->
+</div>
+
+<div class="container mt-3">
+    <button type="button" class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Add Place</button>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Workout Places</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="nameForPlace" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="nameForPlace">
+                </div>
+                <div class="mb-3">
+                    <label for="locationForPlace" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="locationForPlace">
+                </div>
+                <div class="mb-3">
+                    <label for="telForPlace" class="form-label">Phone</label>
+                    <input type="tel" class="form-control" id="telForPlace">
+                </div>
+                <div class="mb-3">
+                    <label for="emailForPlace" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="emailForPlace">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="savePlace">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Places Section -->
+<div class="container table-container">
+    <h2 class="fw-bold">Workout Places</h2><br>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="table-light">
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Phone</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody id="tblBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    let loginBtn = $("#loginBtn");
+    let signupBtn = $("#signupBtn");
+    let logoutBtn = $("#logoutBtn");
+
+    let loginOrNot = function(){
+        if (localStorage.getItem("loginIn") === "true"){
+            loginBtn.hide();
+            signupBtn.hide();
+            logoutBtn.show();
+        } else {
+            logoutBtn.hide();
+            loginBtn.show();
+            signupBtn.show();
+        }
+    }
+    loginOrNot();
+</script>
+<script type="module" src="controllers/place.js"></script>
+</body>
+</html>

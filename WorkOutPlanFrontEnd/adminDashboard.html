@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            background: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+        }
+        .sidebar a:hover {
+            background: #495057;
+        }
+        /* Responsive adjustments */
+        .content {
+            margin-left: 250px;
+            width: 100%;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+        .exTbl {
+            max-height: 300px; /* Adjust height as needed */
+            overflow-y: auto;
+        }
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            .content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <h4 class="text-center">TRAINING <span class="text-danger">STUDIO</span></h4>
+    <a href="adminDashboard.html">Dashboard</a>
+    <div class="dropdown">
+        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Manage Exercise</a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item text-secondary" href="#" data-bs-toggle="modal" data-bs-target="#saveModal">Save</a></li>
+            <li><a class="dropdown-item text-secondary" href="#" data-bs-toggle="modal" data-bs-target="#updateModal">Update</a></li>
+            <li><a class="dropdown-item text-secondary" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a></li>
+            <li><a class="dropdown-item text-secondary" href="#" data-bs-toggle="modal" data-bs-target="#viewModal">View</a></li>
+        </ul>
+    </div>
+    <a onclick="logOut()">Logout</a>
+</div>
+
+<!-- Content -->
+<div class="content">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="btn btn-dark d-lg-none" onclick="toggleSidebar()">☰</button>
+            <a class="navbar-brand fs-2 fw-bold ms-2" href="#">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white text-center p-3">
+                    <h3>Users</h3>
+                    <h4 id="userCount">150</h4>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white text-center p-3">
+                    <h3>Exercises</h3>
+                    <h4 id="exerciseCount">45</h4>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-danger text-white text-center p-3">
+                    <h3>Plans</h3>
+                    <h4 id="planCount">20</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive mt-5">
+        <h2 class="fw-medium fs-4">User Details</h2><br>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Country</th>
+                <th>Plan Count</th>
+            </tr>
+            </thead>
+            <tbody id="userTableBody">
+            <!-- Data will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="saveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-4" id="saveModalLabel">Save Exercise</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="exerciseName" class="form-label">Exercise Name</label>
+                    <input type="text" class="form-control" id="exerciseName" placeholder="Enter exercise name">
+                </div>
+
+                <!-- Dropdown for Body Part Selection -->
+                <div class="mb-3">
+                    <label class="form-label">Body Part</label>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle w-100 text-start" type="button" id="bodyPartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Body Part
+                        </button>
+                        <ul class="dropdown-menu w-100" id="bodyPartMenu">
+                            <li><button class="dropdown-item text-secondary" data-value="Chest" onclick="setBodyPart('Chest')">Chest</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Shoulders" onclick="setBodyPart('Shoulders')">Shoulders</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Triceps" onclick="setBodyPart('Triceps')">Triceps</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Biceps" onclick="setBodyPart('Biceps')">Biceps</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Back" onclick="setBodyPart('Back')">Back</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Legs" onclick="setBodyPart('Legs')">Legs</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="youtubeLink" class="form-label">Add Youtube Link</label>
+                    <input type="url" class="form-control" id="youtubeLink" placeholder="Enter YouTube link">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="exerciseSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-4" id="updateModalLabel">Update Exercise</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 position-relative">
+                    <label class="form-label">Search Exercise</label>
+                    <input type="text" class="form-control" id="exerciseSearch" placeholder="Search exercise...">
+                    <ul class="list-group position-absolute w-100" id="exerciseList" style="display: none; max-height: 200px; overflow-y: auto;"></ul>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exerciseName" class="form-label">Exercise Name</label>
+                    <input type="text" class="form-control" id="updateExerciseName" placeholder="Enter exercise name">
+                </div>
+
+                <!-- Dropdown for Body Part Selection -->
+                <div class="mb-3">
+                    <label class="form-label">Body Part</label>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle w-100 text-start" type="button" id="updateBodyPartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Body Part
+                        </button>
+                        <ul class="dropdown-menu w-100" id="updateBodyPartMenu">
+                            <li><button class="dropdown-item text-secondary" data-value="Chest" onclick="setBodyPart('Chest')">Chest</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Shoulders" onclick="setBodyPart('Shoulders')">Shoulders</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Triceps" onclick="setBodyPart('Triceps')">Triceps</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Biceps" onclick="setBodyPart('Biceps')">Biceps</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Back" onclick="setBodyPart('Back')">Back</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Legs" onclick="setBodyPart('Legs')">Legs</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="youtubeLink" class="form-label">Add Youtube Link</label>
+                    <input type="url" class="form-control" id="updateYoutubeLink" placeholder="Enter YouTube link">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="exerciseUpdateBtn">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-4" id="deleteModalLabel">Delete Exercise</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 position-relative">
+                    <label class="form-label">Search Exercise</label>
+                    <input type="text" class="form-control" id="exerciseSearch1" placeholder="Search exercise...">
+                    <ul class="list-group position-absolute w-100" id="exerciseList1" style="display: none; max-height: 200px; overflow-y: auto;"></ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="exerciseDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-4" id="viewModalLabel">View Exercise</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 position-relative">
+                    <label class="form-label">Search Exercise</label>
+                    <input type="text" class="form-control" id="exerciseSearch2" placeholder="Search exercise...">
+                    <ul class="list-group position-absolute w-100" id="exerciseList2" style="display: none; max-height: 200px; overflow-y: auto;"></ul>
+                </div>
+
+                <div class="mt-0 d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary" id="viewAllBtn">View All</button>
+                </div>
+
+                <div class="table-responsive mt-2 exTbl">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>Exercise Name</th>
+                            <th>Body Part</th>
+                            <th>Youtube Link</th>
+                        </tr>
+                        </thead>
+                        <tbody id="exerciseTableBody">
+                        <!-- Data will be populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function toggleSidebar() {
+        let sidebar = document.getElementById("sidebar");
+        if (sidebar.style.width === "250px") {
+            sidebar.style.width = "0";
+        } else {
+            sidebar.style.width = "250px";
+        }
+    }
+
+    function logOut() {
+        localStorage.removeItem("user");
+        localStorage.removeItem("loginIn");
+        localStorage.removeItem("authToken");
+        window.location.href = "index.html";
+    }
+
+    let setCount = function () {
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/userCount",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    $("#userCount").text(response.data)
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/exerciseCount",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    $("#exerciseCount").text(response.data)
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/planCount",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    $("#planCount").text(response.data)
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    setCount();
+
+    let loadAllUsers = function () {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/allUsers",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    $("#userTableBody").html("");
+                    response.data.forEach(function (value, index) {
+                        $("#userTableBody").append(`<tr>
+                        <td>${value.fullName ? value.fullName : '-'}</td>
+                        <td>${value.gender ? value.gender : '-'}</td>
+                        <td>${value.email ? value.email : '-'}</td>
+                        <td>${value.country ? value.country : '-'}</td>
+                        <td>${value.planCount ? value.planCount : '-'}</td>
+                        </tr>`);
+                    });
+
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    loadAllUsers();
+
+    let bodyPart;
+    let dropDown = $("#bodyPartDropdown");
+
+    function setBodyPart(part) {
+        dropDown.text(part);
+        bodyPart = part;
+    }
+
+    $("#exerciseSaveBtn").click(function () {
+
+        let exercise = {
+            name : $("#exerciseName").val(),
+            bodyPart : bodyPart,
+            link : $("#youtubeLink").val()
+        }
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/saveExercise",
+            type: "POST",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken"),
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(exercise),
+            success: function (response) {
+                if (response.statusCode === 201) {
+                    $("#saveModal").modal("hide");
+                    dropDown.text("Select Body Part")
+                    $("#exerciseName").val("");
+                    $("#youtubeLink").val("");
+                } else {
+                    console.error(response.message);
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        })
+    })
+
+    let exercises = [];
+
+    let loadExerciseNames = function () {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/getExerciseNames",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    exercises = response.data;
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        })
+    }
+    loadExerciseNames();
+
+    $("#exerciseSearch").on("input", function () {
+        let searchText = $(this).val().toLowerCase();
+        let filteredExercises = exercises.filter(ex => ex.toLowerCase().includes(searchText));
+
+        let $exerciseList = $("#exerciseList");
+        $exerciseList.empty(); // Clear previous suggestions
+
+        if (searchText.length > 0 && filteredExercises.length > 0) {
+            filteredExercises.forEach(exercise => {
+                $exerciseList.append(`<li class="list-group-item search-result">${exercise}</li>`);
+            });
+            $exerciseList.show(); // Show list
+        } else {
+            $exerciseList.hide(); // Hide if no results
+        }
+    });
+
+    let exercise;
+
+    $(document).on("click", ".search-result", function () {
+        $("#exerciseSearch").val($(this).text()); // Set selected value
+        $("#updateExerciseName").val($(this).text()); // Set in Exercise Name input
+        $("#exerciseList").hide(); // Hide suggestions
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/getExercise",
+            type: "POST",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            data: { name: $(this).text() },
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    exercise = response.data;
+                    console.log(response.data);
+                    $("#updateYoutubeLink").val(response.data.link);
+                    $("#updateBodyPartDropdown").text(response.data.bodyPart);
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        })
+    });
+
+    $(document).on("click", function (event) {
+        if (!$(event.target).closest("#exerciseSearch, #exerciseList").length) {
+            $("#exerciseList").hide();
+        }
+    });
+
+    $("#exerciseUpdateBtn").click(function () {
+        let exerciseDTO = {
+            exerciseId : exercise.exerciseId,
+            name : $("#updateExerciseName").val(),
+            bodyPart : $("#updateBodyPartDropdown").text(),
+            link : $("#updateYoutubeLink").val()
+        }
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/updateExercise",
+            type: "PUT",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken"),
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(exerciseDTO),
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    $("#updateModal").modal("hide");
+                    $("#updateExerciseName").val("");
+                    $("#updateBodyPartDropdown").text("Select Body Part");
+                    $("#updateYoutubeLink").val("");
+                    $("#exerciseSearch").val();
+                } else {
+                    console.error(response.message);
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        })
+    });
+
+    $("#exerciseSearch1").on("input", function () {
+        let searchText = $(this).val().toLowerCase();
+        let filteredExercises = exercises.filter(ex => ex.toLowerCase().includes(searchText));
+
+        let $exerciseList = $("#exerciseList1");
+        $exerciseList.empty(); // Clear previous suggestions
+
+        if (searchText.length > 0 && filteredExercises.length > 0) {
+            filteredExercises.forEach(exercise => {
+                $exerciseList.append(`<li class="list-group-item search-result1">${exercise}</li>`);
+            });
+            $exerciseList.show(); // Show list
+        } else {
+            $exerciseList.hide(); // Hide if no results
+        }
+    });
+
+    let deleteExerciseId;
+
+    $(document).on("click", ".search-result1", function () {
+        $("#exerciseSearch1").val($(this).text());
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/getExercise",
+            type: "POST",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            data: { name: $(this).text() },
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    deleteExerciseId = response.data.exerciseId;
+                    console.log(deleteExerciseId);
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        })
+    });
+
+    $(document).on("click", function (event) {
+        if (!$(event.target).closest("#exerciseSearch1, #exerciseList1").length) {
+            $("#exerciseList1").hide();
+        }
+    });
+
+    $("#exerciseDeleteBtn").click(function () {
+       $.ajax({
+           url: "http://localhost:8080/api/v1/admin/deleteExercise/" + deleteExerciseId,
+           type: "DELETE",
+           headers: {
+               "Authorization": "Bearer " + localStorage.getItem("authToken")
+           },
+           success: function (response) {
+               if (response.statusCode === 200) {
+                   $("#deleteModal").modal("hide");
+                   $("#exerciseSearch1").val("");
+               } else {
+                   console.error(response.message);
+               }
+           },
+           error: function (error) {
+               console.error(error);
+           }
+       })
+    });
+
+    let allExercises = [];
+
+    let loadAllExercises = function () {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/getAllExercise",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function (response) {
+                if (response.statusCode === 200) {
+                    allExercises = response.data;
+                    $("#exerciseTableBody").html("");
+                    response.data.forEach(function (value, index) {
+                        $("#exerciseTableBody").append(`<tr>
+                        <td>${value.name ? value.name : '-'}</td>
+                        <td>${value.bodyPart ? value.bodyPart : '-'}</td>
+                        <td><a href="${value.link}">link</a></td>
+                        </tr>`);
+                    });
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+    loadAllExercises();
+
+    $("#exerciseSearch2").on("input", function () {
+        let searchText = $(this).val().toLowerCase();
+        let filteredExercises = exercises.filter(ex => ex.toLowerCase().includes(searchText));
+
+        let $exerciseList = $("#exerciseList2");
+        $exerciseList.empty(); // Clear previous suggestions
+
+        if (searchText.length > 0 && filteredExercises.length > 0) {
+            filteredExercises.forEach(exercise => {
+                $exerciseList.append(`<li class="list-group-item search-result2">${exercise}</li>`);
+            });
+            $exerciseList.show(); // Show list
+        } else {
+            $exerciseList.hide(); // Hide if no results
+        }
+    });
+
+    $(document).on("click", ".search-result2", function () {
+        let name = $(this).text();
+        $("#exerciseSearch2").val(name);
+        $("#exerciseList2").hide();
+
+        allExercises.forEach(function (value, index) {
+            if (value.name === name) {
+                $("#exerciseTableBody").html("");
+                $("#exerciseTableBody").append(`<tr>
+                        <td>${value.name ? value.name : '-'}</td>
+                        <td>${value.bodyPart ? value.bodyPart : '-'}</td>
+                        <td><a href="${value.link}">link</a></td>
+                        </tr>`);
+            }
+        })
+    });
+
+    $(document).on("click", function (event) {
+        if (!$(event.target).closest("#exerciseSearch2, #exerciseList2").length) {
+            $("#exerciseList2").hide();
+        }
+    });
+
+    $("#viewAllBtn").click(function () {
+        loadAllExercises();
+        $("#exerciseSearch2").val("");
+    })
+</script>
+
+</body>
+</html>

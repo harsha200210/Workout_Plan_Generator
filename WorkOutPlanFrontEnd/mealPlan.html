@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Meal Plan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .header-container {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            background: url('assets/image/meal.jpg') no-repeat center center/cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay effect */
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">TRAINING <span class="text-danger">STUDIO</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="schedules.html">Schedules</a></li>
+                <li class="nav-item"><a class="nav-link" href="trainers.html">Trainers</a></li>
+                <li class="nav-item"><a class="nav-link" href="places.html">Places</a></li>
+                <li class="nav-item"><a class="nav-link" href="mealPlan.html">Meal Plan</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                <li class="nav-item" id="loginBtn"><a class="btn btn-outline-light me-2" href="login.html">Login</a></li>
+                <li class="nav-item" id="signupBtn"><a class="btn btn-danger" href="signup.html">Sign Up</a></li>
+                <li class="nav-item" id="logoutBtn"><a class="btn btn-danger" href="index.html">Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Fullscreen Header Image -->
+<div class="header-container">
+    <div class="overlay"></div>
+</div>
+
+<div class="container mt-5 d-flex justify-content-center">
+    <button type="button" class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="getPlanBtn">Get Workout Plan</button>
+</div>
+
+<div class="container my-5" id="plan1">
+    <h2 class="text-center fw-bold mb-4">🔥 Your Meal Plan</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🔥 Calorie Goal: 2,800 - 3,200 kcal</h5>
+                    <p><strong>💪 Protein Goal:</strong> 100-120g per day (1.8 - 2.2g/kg)</p>
+                    <p><strong>🥑 Macronutrient Split:</strong></p>
+                    <ul>
+                        <li><strong>40% Carbs:</strong> Rice, Oats, Bread, Potatoes, Fruits</li>
+                        <li><strong>30% Protein:</strong> Chicken, Eggs, Fish, Beef, Dairy</li>
+                        <li><strong>30% Fats:</strong> Nuts, Avocado, Olive Oil, Peanut Butter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="text-center mt-4 mb-3">🥗 6 Meals a Day Plan</h3>
+
+    <div class="row">
+        <!-- Meal 1 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕗 Meal 1 – Breakfast (700 kcal)</h5>
+                    <ul>
+                        <li>4 whole eggs + 2 egg whites (30g protein)</li>
+                        <li>2 slices whole wheat bread</li>
+                        <li>1 tbsp peanut butter</li>
+                        <li>1 banana</li>
+                        <li>1 glass full-fat milk</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 2 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕙 Meal 2 – Morning Snack (450 kcal)</h5>
+                    <ul>
+                        <li>50g oats with 1 tbsp honey</li>
+                        <li>10 almonds + 10 cashews</li>
+                        <li>1 scoop whey protein (if available)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 3 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕛 Meal 3 – Lunch (800 kcal)</h5>
+                    <ul>
+                        <li>1.5 cups cooked rice</li>
+                        <li>150g chicken breast or fish</li>
+                        <li>1 cup vegetables</li>
+                        <li>1 tbsp olive oil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 4 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕒 Meal 4 – Pre-Workout (400 kcal)</h5>
+                    <ul>
+                        <li>1 boiled sweet potato or 1 apple</li>
+                        <li>1 tbsp peanut butter</li>
+                        <li>1 cup Greek yogurt</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Post-Workout Meal -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🏋️‍♂️ Post-Workout Meal (450 kcal)</h5>
+                    <ul>
+                        <li>1 scoop whey protein (if available)</li>
+                        <li>250ml full-fat milk</li>
+                        <li>1 tbsp honey</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 5 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕡 Meal 5 – Dinner (700 kcal)</h5>
+                    <ul>
+                        <li>1.5 cups cooked rice</li>
+                        <li>150g beef or chicken</li>
+                        <li>1 cup vegetables</li>
+                        <li>1 tbsp olive oil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 6 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕙 Meal 6 – Before Bed (400 kcal)</h5>
+                    <ul>
+                        <li>1 glass warm milk</li>
+                        <li>10 almonds</li>
+                        <li>2 slices whole wheat bread with peanut butter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h4 class="card-title">💡 Additional Tips</h4>
+            <ul>
+                <li>✅ Drink at least 3-4L of water per day</li>
+                <li>✅ Eat every 2-3 hours</li>
+                <li>✅ Train heavy (progressive overload)</li>
+                <li>✅ Get at least 7-8 hours of sleep</li>
+                <li>✅ Use whey protein if needed to meet protein goals</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<div class="container my-5" id="plan2">
+    <h2 class="text-center fw-bold mb-4">🔥 Your Meal Plan</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🔥 Daily Calorie Goal: 2,200 - 2,500 kcal</h5>
+                    <p><strong>💪 Protein Goal:</strong> ~1.5g per kg (~75-100g protein/day)</p>
+                    <p><strong>🥑 Macronutrient Split:</strong></p>
+                    <ul>
+                        <li><strong>45% Carbs:</strong> Rice, Oats, Bread, Potatoes, Fruits</li>
+                        <li><strong>30% Protein:</strong> Chicken, Eggs, Fish, Beef, Dairy</li>
+                        <li><strong>25% Fats:</strong> Nuts, Avocado, Olive Oil, Peanut Butter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="text-center mt-4 mb-3">🥗 Balanced Daily Meal Plan (5-6 Meals a Day)</h3>
+
+    <div class="row">
+        <!-- Meal 1 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕗 Meal 1 – Breakfast (600 kcal)</h5>
+                    <ul>
+                        <li>3 whole eggs + 2 egg whites (24g protein)</li>
+                        <li>2 slices whole wheat bread</li>
+                        <li>1 tbsp peanut butter</li>
+                        <li>1 banana</li>
+                        <li>1 glass low-fat milk</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 2 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕙 Meal 2 – Morning Snack (400 kcal)</h5>
+                    <ul>
+                        <li>1 cup Greek yogurt</li>
+                        <li>10 almonds + 10 cashews</li>
+                        <li>1 apple or orange</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 3 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕛 Meal 3 – Lunch (700 kcal)</h5>
+                    <ul>
+                        <li>1.5 cups cooked rice or 2 whole wheat chapatis</li>
+                        <li>150g chicken breast, fish, or tofu</li>
+                        <li>1 cup vegetables (broccoli, carrots, spinach)</li>
+                        <li>1 tbsp olive oil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 4 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕒 Meal 4 – Evening Snack (350 kcal)</h5>
+                    <ul>
+                        <li>1 boiled sweet potato or handful of nuts</li>
+                        <li>1 glass fresh fruit juice or a protein shake</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 5 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕡 Meal 5 – Dinner (600 kcal)</h5>
+                    <ul>
+                        <li>1 cup cooked rice or quinoa</li>
+                        <li>150g grilled chicken, paneer, or fish</li>
+                        <li>1 cup mixed vegetables</li>
+                        <li>1 tbsp olive oil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 6 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕙 Meal 6 – Before Bed (200 kcal)</h5>
+                    <ul>
+                        <li>1 glass warm milk</li>
+                        <li>10 almonds or 1 tbsp peanut butter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h4 class="card-title">💡 Additional Tips</h4>
+            <ul>
+                <li>✅ Stay hydrated (2.5 - 3L of water daily)</li>
+                <li>✅ Avoid excessive junk food & sugary drinks</li>
+                <li>✅ Focus on whole foods (lean proteins, complex carbs, healthy fats)</li>
+                <li>✅ Stay active with light workouts or cardio</li>
+                <li>✅ Get at least 7-8 hours of sleep</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="container my-5" id="plan3">
+    <h2 class="text-center fw-bold mb-4">🔥 Your Meal Plan</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🔥 Daily Calorie Goal: 2,500 - 3,000 kcal (for maintenance & muscle growth)</h5>
+                    <p><strong>💪 Protein Goal:</strong> ~1.5g per kg (~100-120g protein/day)</p>
+                    <p><strong>🥑 Macronutrient Split:</strong></p>
+                    <ul>
+                        <li><strong>40% Carbs:</strong> Rice, Oats, Bread, Potatoes, Fruits</li>
+                        <li><strong>30% Protein:</strong> Chicken, Eggs, Fish, Beef, Dairy</li>
+                        <li><strong>30% Healthy Fats:</strong> Nuts, Avocado, Olive Oil, Peanut Butter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="text-center mt-4 mb-3">🥗 Healthy Diet Plan for 70kg+ (6 Meals a Day)</h3>
+
+    <div class="row">
+        <!-- Meal 1 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕗 Meal 1 – Breakfast (700 kcal)</h5>
+                    <ul>
+                        <li>4 whole eggs + 2 egg whites (30g protein)</li>
+                        <li>2 slices whole wheat bread</li>
+                        <li>1 tbsp peanut butter</li>
+                        <li>1 banana</li>
+                        <li>1 glass full-fat milk</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 2 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕙 Meal 2 – Morning Snack (400 kcal)</h5>
+                    <ul>
+                        <li>50g oats with 1 tbsp honey</li>
+                        <li>10 almonds + 10 cashews</li>
+                        <li>1 scoop whey protein (if available)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 3 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕛 Meal 3 – Lunch (800 kcal)</h5>
+                    <ul>
+                        <li>1.5-2 cups cooked rice or 2 whole wheat chapatis</li>
+                        <li>150-200g chicken, fish, or tofu</li>
+                        <li>1 cup mixed vegetables (broccoli, carrots, spinach)</li>
+                        <li>1 tbsp olive oil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 4 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕒 Meal 4 – Evening Snack (450 kcal)</h5>
+                    <ul>
+                        <li>1 boiled sweet potato or 1 apple</li>
+                        <li>1 cup Greek yogurt</li>
+                        <li>1 handful mixed nuts</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 5 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕡 Meal 5 – Dinner (700 kcal)</h5>
+                    <ul>
+                        <li>1.5 cups cooked rice or quinoa</li>
+                        <li>200g grilled chicken, beef, or fish</li>
+                        <li>1 cup steamed vegetables</li>
+                        <li>1 tbsp olive oil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal 6 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">🕙 Meal 6 – Before Bed (400 kcal)</h5>
+                    <ul>
+                        <li>1 glass warm milk</li>
+                        <li>10 almonds</li>
+                        <li>2 slices whole wheat bread with peanut butter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h4 class="card-title">💡 Additional Tips</h4>
+            <ul>
+                <li>✅ Drink at least 3-4L of water per day</li>
+                <li>✅ Eat every 3-4 hours to maintain energy levels</li>
+                <li>✅ Stay active with weight training or cardio</li>
+                <li>✅ Avoid processed foods, excessive sugar, and junk food</li>
+                <li>✅ Get at least 7-8 hours of sleep for recovery</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let loginBtn = $("#loginBtn");
+    let signupBtn = $("#signupBtn");
+    let logoutBtn = $("#logoutBtn");
+
+    $("#getPlanBtn").show();
+    $("#plan1").hide();
+    $("#plan2").hide();
+    $("#plan3").hide();
+
+    let loginOrNot = function(){
+        if (localStorage.getItem("loginIn") === "true"){
+            loginBtn.hide();
+            signupBtn.hide();
+            logoutBtn.show();
+        } else {
+            logoutBtn.hide();
+            loginBtn.show();
+            signupBtn.show();
+        }
+    }
+    loginOrNot();
+
+    let checkMealPlan = function() {
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/auth/nowWeight",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                if (response.statusCode === 200) {
+                    let weight = response.data;
+                    console.log(weight)
+                    if (weight === 0.0){
+                        $("#getPlanBtn").show();
+                        $("#plan1").hide();
+                        $("#plan2").hide();
+                        $("#plan3").hide();
+                    } else if (weight <= 50.0){
+                        $("#getPlanBtn").hide();
+                        $("#plan1").show();
+                        $("#plan2").hide();
+                        $("#plan3").hide();
+                    } else if (50.0 < weight && weight <= 70.0) {
+                        $("#getPlanBtn").hide();
+                        $("#plan1").hide();
+                        $("#plan2").show();
+                        $("#plan3").hide();
+                    } else {
+                        $("#getPlanBtn").hide();
+                        $("#plan1").hide();
+                        $("#plan2").hide();
+                        $("#plan3").show();
+                    }
+                }
+            },
+            error: function(error) {
+                console.log("Error checking meal plan: ", error);
+            }
+        });
+    }
+
+    checkMealPlan();
+
+</script>
+</body>
+</html>

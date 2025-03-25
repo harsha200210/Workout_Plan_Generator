@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Goal Selection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .slider-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .slider-step {
+            display: none;
+        }
+        .active-step {
+            display: block;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .option img {
+            width: 70px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .weight-display {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .toggle-btn button {
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .toggle-btn .active {
+            background-color: #00ff99;
+            color: black;
+        }
+        .btn-custom {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 10px;
+        }
+        #exerciseTableContainer {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body class="bg-dark">
+<div class="slider-container">
+    <div id="step-1" class="slider-step active-step">
+        <h3 class="fw-bold fs-1">What is your body type?</h3><br>
+        <div class="option" onclick="selectNowBody('Slim', 2)">
+            <span class="fw-semibold fs-3">Slim</span>
+            <img src="image/bg_1.jpg" alt="Slim Body Type">
+        </div>
+        <div class="option" onclick="selectNowBody('Typical', 2)">
+            <span class="fw-semibold fs-3">Typical</span>
+            <img src="image/bg_1.jpg" alt="Typical Body Type">
+        </div>
+        <div class="option" onclick="selectNowBody('Plus-Sized', 2)">
+            <span class="fw-semibold fs-3">Plus-Sized</span>
+            <img src="image/bg_1.jpg" alt="Plus-Sized Body Type">
+        </div>
+    </div>
+
+    <div id="step-2" class="slider-step">
+        <h3 class="fw-bold fs-1">What is your current weight?</h3><br>
+        <div class="toggle-btn d-flex mt-3">
+            <button id="lbs-btn" onclick="setUnit('lbs')">lbs</button>
+            <button id="kg-btn" class="active" onclick="setUnit('kg')">kg</button>
+        </div>
+        <div class="weight-display mt-3">
+            <input type="number" id="weightInput" class="form-control text-center fw-bold fs-4" style="width: 100px; display: inline-block;" value="50">
+            <span id="unit">kg</span>
+        </div>
+        <button id="now-continue" class="btn btn-primary btn-custom mt-3" onclick="nextStep(3)">Continue</button>
+    </div>
+
+    <div id="step-3" class="slider-step">
+        <h3 class="fw-bold fs-1">Preferred Workout Duration</h3><br>
+        <div class="option" onclick="selectTime(30, 4)">
+            <span class="fw-semibold fs-3">30 Minutes</span>
+        </div>
+        <div class="option" onclick="selectTime(1, 4)">
+            <span class="fw-semibold fs-3">1 Hour</span>
+        </div>
+        <div class="option" onclick="selectTime(2, 4)">
+            <span class="fw-semibold fs-3">Above 1 Hour</span>
+        </div>
+    </div>
+
+    <div id="step-4" class="slider-step">
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner">
+                <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h4 class="text-white mt-3">Loading, please wait...</h4>
+            </div>
+        </div>
+
+        <button class="btn btn-success btn-custom mt-3 fw-bold fs-1" id="getPlanBtn" >Get Plan</button>
+    </div>
+
+    <div id="step-5" class="slider-step">
+        <h3 class="mb-3 fw-bold fs-1">Exercise Plan</h3>
+
+        <div class="table-responsive" id="exerciseTableContainer">
+            <table class="table table-bordered table-striped" id="exerciseTable">
+                <thead class="table-dark">
+                <tr>
+                    <th>Exercise</th>
+                    <th>YouTube Link</th>
+                </tr>
+                </thead>
+                <tbody id="exerciseTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <button id="downloadPdf" class="btn btn-primary">Download PDF</button>
+        <a href="index.html"><button class="btn btn-success">Home</button></a>
+    </div>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script>
+    function nextStep(step) {
+        $('.slider-step').removeClass('active-step');
+        $('#step-' + step).addClass('active-step');
+    }
+
+    let nowBody;
+    let nowWeight;
+    let workTime;
+
+    function selectNowBody(type, next) {
+        console.log(type);
+        nowBody = type.trim();
+        nextStep(next);
+    }
+
+    function selectTime(type, next) {
+        console.log(type);
+        workTime = parseInt(type);
+        nextStep(next)
+    }
+
+    function setUnit(unit) {
+        $("#unit, #unit1").text(unit);
+
+        $(".toggle-btn button").removeClass("active");
+        $("#" + unit + "-btn, #" + unit + "-btn1").addClass("active");
+    }
+
+    $("#now-continue").click(function () {
+        let weight = $("#weightInput").val().trim();
+        if ($("#unit").text().trim() === "kg"){
+            console.log(weight);
+            nowWeight = parseFloat(weight)
+        } else {
+            console.log(parseFloat(weight) * 0.453592);
+            nowWeight = parseFloat(weight) * 0.453592;
+        }
+    });
+
+    $("#getPlanBtn").click(function () {
+
+        $("#loadingOverlay").fadeIn();
+
+        let token = localStorage.getItem("authToken");
+
+        setTimeout(() => {
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/3Day',
+                method: 'POST',
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "nowBodyType": nowBody,
+                    "weight": nowWeight,
+                    "workOutTime": workTime
+                }),
+                success: function (response) {
+                    if (response.statusCode === 200) {
+                        $("#loadingOverlay").fadeOut();
+                        console.log(response);
+                        $("#exerciseTableBody").html('');
+
+                        response.data.exercises.forEach(function (exercise, index) {
+
+                            if (response.data.exercisesList[index] == null) {
+                                let link = "";
+
+                                $("#exerciseTableBody").append(`
+                            <tr>
+                                <td>${exercise}</td>
+                                <td><a href="${link}" target="_blank"></a></td>
+                            </tr>
+                            `);
+                            } else {
+                                let link = response.data.exercisesList[index]?.link;
+
+                                $("#exerciseTableBody").append(`
+                            <tr>
+                                <td>${exercise}</td>
+                                <td><a href="${link}" target="_blank">YouTube Link</a></td>
+                            </tr>
+                            `);
+                            }
+
+                        });
+                        nextStep(5);
+                    }
+                },
+                error: function (error) {
+                    $("#loadingOverlay").fadeOut();
+                    console.error(error);
+                }
+            })
+        },100);
+    });
+
+    $("#downloadPdf").click(function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const headers = [["Exercise", "YouTube Link"]];
+
+        const data = [];
+        $("#exerciseTableBody tr").each(function () {
+            const exercise = $(this).find("td:eq(0)").text();
+            const link = $(this).find("td:eq(1) a").attr("href");
+
+            data.push([exercise, link]);
+        });
+
+        doc.autoTable({
+            head: headers,
+            body: data,
+            didDrawCell: function (data) {
+                if (data.column.index === 1) {
+                    doc.textWithLink(data.row.cells[1].raw, data.cell.x + 2, data.cell.y + 5, {
+                        url: data.row.cells[1].raw
+                    });
+                }
+            }
+        });
+
+        doc.save("Exercise_Table.pdf");
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
