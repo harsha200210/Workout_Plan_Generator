@@ -1,4 +1,5 @@
 import {setAlert} from "../util/alert.js";
+import {EMAIL, NAME, TEL} from "../util/regex.js";
 
 export let getAllTrainers = function () {
     $.ajax({
@@ -30,32 +31,59 @@ export let getAllTrainers = function () {
 getAllTrainers();
 
 $("#saveTrainer").click(function () {
+  if (validationInputs()) {
     let trainer = {
-        name: $("#nameForTrainer").val(),
-        location: $("#locationForTrainer").val(),
-        experience: $("#ExperienceForTrainer").val(),
-        tel: $("#telForTrainer").val(),
-        email: $("#emailForTrainer").val()
+      name: $("#nameForTrainer").val(),
+      location: $("#locationForTrainer").val(),
+      experience: $("#ExperienceForTrainer").val(),
+      tel: $("#telForTrainer").val(),
+      email: $("#emailForTrainer").val()
     }
 
     $.ajax({
-        url: "http://localhost:8080/api/v1/trainers/save",
-        method: "POST",
-        headers : {
-            "Authorization": "Bearer " + localStorage.getItem("authToken")
-        },
-        data: JSON.stringify(trainer),
-        contentType: "application/json",
-        success: function(response) {
-            if (response.statusCode === 201) {
-                $("#staticBackdrop").modal("hide");
-                getAllTrainers();
-                setAlert("success" , "Save Trainer Successfully!!")
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr, status, error);
-            setAlert("error", "Failed to Save Trainer!!")
+      url: "http://localhost:8080/api/v1/trainers/save",
+      method: "POST",
+      headers : {
+        "Authorization": "Bearer " + localStorage.getItem("authToken")
+      },
+      data: JSON.stringify(trainer),
+      contentType: "application/json",
+      success: function(response) {
+        if (response.statusCode === 201) {
+          $("#staticBackdrop").modal("hide");
+          getAllTrainers();
+          setAlert("success" , "Save Trainer Successfully!!")
         }
+      },
+      error: function(xhr, status, error) {
+        console.error(xhr, status, error);
+        setAlert("error", "Failed to Save Trainer!!")
+      }
     })
-})
+  }
+});
+
+let validationInputs = () => {
+  if (NAME.test($("#nameForTrainer").val())) {
+    if ($("#locationForTrainer").val() !== "") {
+      if ($("#ExperienceForTrainer").val()) {
+        if (TEL.test($("#telForTrainer").val())) {
+          if (EMAIL.test($("#emailForTrainer").val())) {
+            return true;
+          } else {
+            setAlert("error", "Please enter a valid email address !!")
+          }
+        } else {
+          setAlert("error", "Please enter a valid phone number !!")
+        }
+      } else {
+        setAlert("error", "Please enter a experience")
+      }
+    } else {
+      setAlert("error" , "Please enter a location !!")
+    }
+  } else {
+    setAlert("error" , "Please enter a name !!")
+  }
+  return false;
+}

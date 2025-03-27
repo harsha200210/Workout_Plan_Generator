@@ -1,6 +1,7 @@
 package lk.ijse.workoutplanbackend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class BMICount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bmiId;
+    @Pattern(regexp = "^\\d*\\.?\\d+$", message = "Invalid BMI")
     private Double bmi;
     private Date date;
 

@@ -196,12 +196,12 @@
                             Select Body Part
                         </button>
                         <ul class="dropdown-menu w-100" id="updateBodyPartMenu">
-                            <li><button class="dropdown-item text-secondary" data-value="Chest" onclick="setBodyPart('Chest')">Chest</button></li>
-                            <li><button class="dropdown-item text-secondary" data-value="Shoulders" onclick="setBodyPart('Shoulders')">Shoulders</button></li>
-                            <li><button class="dropdown-item text-secondary" data-value="Triceps" onclick="setBodyPart('Triceps')">Triceps</button></li>
-                            <li><button class="dropdown-item text-secondary" data-value="Biceps" onclick="setBodyPart('Biceps')">Biceps</button></li>
-                            <li><button class="dropdown-item text-secondary" data-value="Back" onclick="setBodyPart('Back')">Back</button></li>
-                            <li><button class="dropdown-item text-secondary" data-value="Legs" onclick="setBodyPart('Legs')">Legs</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Chest" onclick="updateBodyPart('Chest')">Chest</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Shoulders" onclick="updateBodyPart('Shoulders')">Shoulders</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Triceps" onclick="updateBodyPart('Triceps')">Triceps</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Biceps" onclick="updateBodyPart('Biceps')">Biceps</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Back" onclick="updateBodyPart('Back')">Back</button></li>
+                            <li><button class="dropdown-item text-secondary" data-value="Legs" onclick="updateBodyPart('Legs')">Legs</button></li>
                         </ul>
                     </div>
                 </div>
@@ -388,37 +388,61 @@
         bodyPart = part;
     }
 
+    function updateBodyPart(part) {
+      $("#updateBodyPartDropdown").text(part);
+    }
+
     $("#exerciseSaveBtn").click(function () {
 
+      if (validationSaveInput()) {
         let exercise = {
-            name : $("#exerciseName").val(),
-            bodyPart : bodyPart,
-            link : $("#youtubeLink").val()
+          name : $("#exerciseName").val(),
+          bodyPart : bodyPart,
+          link : $("#youtubeLink").val()
         }
 
         $.ajax({
-            url: "http://localhost:8080/api/v1/admin/saveExercise",
-            type: "POST",
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("authToken"),
-                "Content-Type": "application/json"
-            },
-            data: JSON.stringify(exercise),
-            success: function (response) {
-                if (response.statusCode === 201) {
-                    $("#saveModal").modal("hide");
-                    dropDown.text("Select Body Part")
-                    $("#exerciseName").val("");
-                    $("#youtubeLink").val("");
-                } else {
-                    console.error(response.message);
-                }
-            },
-            error: function (error) {
-                console.error(error);
+          url: "http://localhost:8080/api/v1/admin/saveExercise",
+          type: "POST",
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("authToken"),
+            "Content-Type": "application/json"
+          },
+          data: JSON.stringify(exercise),
+          success: function (response) {
+            if (response.statusCode === 201) {
+              $("#saveModal").modal("hide");
+              dropDown.text("Select Body Part")
+              $("#exerciseName").val("");
+              $("#youtubeLink").val("");
+            } else {
+              console.error(response.message);
             }
+          },
+          error: function (error) {
+            console.error(error);
+          }
         })
-    })
+      }
+
+    });
+
+    let validationSaveInput = () => {
+      if ($('#exerciseName').val() !== ""){
+        if ($('#bodyPartDropdown').text().trim() !== "Select Body Part"){
+          if ($('#youtubeLink').val() !== "") {
+            return true;
+          } else {
+            alert('Enter Youtube Link !!');
+          }
+        } else {
+          alert('Enter Body Part !!');
+        }
+      } else {
+        alert('Enter Name !!');
+      }
+      return false;
+    }
 
     let exercises = [];
 
@@ -493,37 +517,57 @@
     });
 
     $("#exerciseUpdateBtn").click(function () {
+
+      if (validationUpdateInput()) {
         let exerciseDTO = {
-            exerciseId : exercise.exerciseId,
-            name : $("#updateExerciseName").val(),
-            bodyPart : $("#updateBodyPartDropdown").text(),
-            link : $("#updateYoutubeLink").val()
+          exerciseId : exercise.exerciseId,
+          name : $("#updateExerciseName").val(),
+          bodyPart : $("#updateBodyPartDropdown").text(),
+          link : $("#updateYoutubeLink").val()
         }
 
         $.ajax({
-            url: "http://localhost:8080/api/v1/admin/updateExercise",
-            type: "PUT",
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("authToken"),
-                "Content-Type": "application/json"
-            },
-            data: JSON.stringify(exerciseDTO),
-            success: function (response) {
-                if (response.statusCode === 200) {
-                    $("#updateModal").modal("hide");
-                    $("#updateExerciseName").val("");
-                    $("#updateBodyPartDropdown").text("Select Body Part");
-                    $("#updateYoutubeLink").val("");
-                    $("#exerciseSearch").val();
-                } else {
-                    console.error(response.message);
-                }
-            },
-            error: function (error) {
-                console.error(error);
+          url: "http://localhost:8080/api/v1/admin/updateExercise",
+          type: "PUT",
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("authToken"),
+            "Content-Type": "application/json"
+          },
+          data: JSON.stringify(exerciseDTO),
+          success: function (response) {
+            if (response.statusCode === 200) {
+              $("#updateModal").modal("hide");
+              $("#updateExerciseName").val("");
+              $("#updateBodyPartDropdown").text("Select Body Part");
+              $("#updateYoutubeLink").val("");
+              $("#exerciseSearch").val();
+            } else {
+              console.error(response.message);
             }
+          },
+          error: function (error) {
+            console.error(error);
+          }
         })
+      }
     });
+
+    let validationUpdateInput = () => {
+      if ($('#updateExerciseName').val() !== ""){
+        if ($('#updateBodyPartDropdown').text().trim() !== "Select Body Part"){
+          if ($('#updateYoutubeLink').val() !== "") {
+            return true;
+          } else {
+            alert('Enter Youtube Link !!');
+          }
+        } else {
+          alert('Enter Body Part !!');
+        }
+      } else {
+        alert('Enter Name !!');
+      }
+      return false;
+    }
 
     $("#exerciseSearch1").on("input", function () {
         let searchText = $(this).val().toLowerCase();

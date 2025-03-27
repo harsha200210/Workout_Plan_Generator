@@ -208,40 +208,50 @@ let today = new Date();
 let formattedDate = today.toISOString().split('T')[0];
 
 $("#weightSaveBtn").click(function () {
+  if (validationWeight()) {
     let nowWeight;
     let weight = $("#weightInput").val().trim();
     if ($("#unit").text().trim() === "kg"){
-        nowWeight = parseFloat(weight)
+      nowWeight = parseFloat(weight)
     } else {
-        nowWeight = parseFloat(weight) * 0.453592;
+      nowWeight = parseFloat(weight) * 0.453592;
     }
 
     let weightCount = {
-        weight : nowWeight,
-        date : formattedDate
+      weight : nowWeight,
+      date : formattedDate
     }
 
     $.ajax({
-        url: "http://localhost:8080/api/v1/weightCounts/saveWeight",
-        method: "POST",
-        contentType: "application/json",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem("authToken"),
-        },
-        data: JSON.stringify(weightCount),
-        success: function (response) {
-            if (response.statusCode === 201){
-                $("#staticBackdrop").modal("hide");
-                setAlert("success", "Add Weight Successfully")
-                loadWeightCount();
-            }
-        },
-        error: function (error) {
-            console.error(error);
+      url: "http://localhost:8080/api/v1/weightCounts/saveWeight",
+      method: "POST",
+      contentType: "application/json",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("authToken"),
+      },
+      data: JSON.stringify(weightCount),
+      success: function (response) {
+        if (response.statusCode === 201){
+          $("#staticBackdrop").modal("hide");
+          setAlert("success", "Add Weight Successfully")
+          loadWeightCount();
         }
+      },
+      error: function (error) {
+        console.error(error);
+      }
     })
-
+  }
 });
+
+let validationWeight = () => {
+  if (/^\d*\.?\d+$/.test($("#weightInput").val())) {
+   return true;
+  } else {
+    setAlert("error" ,"Please enter a valid weight!");
+  }
+  return false;
+}
 
 $("#setBmi").click(function () {
     content1.show();
@@ -253,46 +263,57 @@ $("#setBmi").click(function () {
 })
 
 $("#saveBmi").click(function () {
+  if(validationBmi()) {
     let nowWeight;
     let weight = $("#weightInput1").val().trim();
     if ($("#unit1").text().trim() === "kg"){
-        nowWeight = parseFloat(weight)
+      nowWeight = parseFloat(weight)
     } else {
-        nowWeight = parseFloat(weight) * 0.453592;
+      nowWeight = parseFloat(weight) * 0.453592;
     }
 
     let nowHeight;
     let height = $("#heightInput").val().trim();
     if ($("#unit2").text().trim() === "cm"){
-        nowHeight = parseFloat(height) / 100;
+      nowHeight = parseFloat(height) / 100;
     } else {
-        nowHeight = parseFloat(height) * 0.3048;
+      nowHeight = parseFloat(height) * 0.3048;
     }
 
     let bmi = nowWeight / Math.pow(nowHeight, 2);
 
     let bmiCount = {
-        bmi : bmi,
-        date : formattedDate
+      bmi : bmi,
+      date : formattedDate
     }
 
     $.ajax({
-        url: "http://localhost:8080/api/v1/bmi/saveBmiCounts",
-        method: "POST",
-        contentType: "application/json",
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem("authToken"),
-        },
-        data: JSON.stringify(bmiCount),
-        success: function (response) {
-            if (response.statusCode === 201){
-                $("#staticBackdrop1").modal("hide");
-                setAlert("success", "Add BMI Successfully")
-                loadBmiCounts();
-            }
-        },
-        error: function (error) {
-            console.error(error);
+      url: "http://localhost:8080/api/v1/bmi/saveBmiCounts",
+      method: "POST",
+      contentType: "application/json",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("authToken"),
+      },
+      data: JSON.stringify(bmiCount),
+      success: function (response) {
+        if (response.statusCode === 201){
+          $("#staticBackdrop1").modal("hide");
+          setAlert("success", "Add BMI Successfully")
+          loadBmiCounts();
         }
+      },
+      error: function (error) {
+        console.error(error);
+      }
     })
-})
+  }
+});
+
+let validationBmi = () => {
+  if (/^\d*\.?\d+$/.test($("#heightInput").val())) {
+    return true;
+  } else {
+    setAlert("error","Please enter a valid height!");
+  }
+  return false;
+}

@@ -206,8 +206,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 <script>
     function nextStep(step) {
+      if (step === 4) {
+        if (/^\d*\.?\d+$/.test($("#weightInput").val())) {
+          $('.slider-step').removeClass('active-step');
+          $('#step-' + step).addClass('active-step');
+        } else {
+          alert("Please enter a valid weight!");
+        }
+      } else if (step === 5) {
+        if (/^\d*\.?\d+$/.test($("#weightInput1").val())) {
+          $('.slider-step').removeClass('active-step');
+          $('#step-' + step).addClass('active-step');
+        } else {
+          alert("Please enter a valid weight!");
+        }
+      } else {
         $('.slider-step').removeClass('active-step');
         $('#step-' + step).addClass('active-step');
+      }
     }
 
     let nowBody;

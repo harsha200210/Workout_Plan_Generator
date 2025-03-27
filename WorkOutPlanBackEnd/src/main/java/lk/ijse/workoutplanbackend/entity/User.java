@@ -1,6 +1,9 @@
 package lk.ijse.workoutplanbackend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,16 +19,21 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+    @Pattern(regexp = "^[A-Za-z]+(?: [A-Za-z]+)*$", message = "Name must contain only letters and spaces")
     private String fullName;
     private String Gender;
     @Column(unique = true)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email address")
     private String email;
     private String password;
     private String country;
     private String role;
     private String nowBodyType;
     private String targetBodyType;
+    @Pattern(regexp = "^\\d*\\.?\\d+$", message = "Invalid Weight")
     private double weight;
+    @Pattern(regexp = "^\\d*\\.?\\d+$", message = "Invalid Target Weight")
     private double targetWeight;
     private int workOutTime;
     private Long planCount;

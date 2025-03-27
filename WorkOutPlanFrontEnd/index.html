@@ -274,8 +274,13 @@
     let content2 = $("#content2").hide();
 
     let hideContent = function () {
+      if (/^\d*\.?\d+$/.test($("#weightInput1").val())) {
         content1.hide();
         content2.show();
+      } else {
+        alert("Please enter a valid weight")
+      }
+
     }
 
     function setWeightUnit(unit) {
