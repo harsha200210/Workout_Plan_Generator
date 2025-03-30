@@ -16,7 +16,6 @@ public class WeightCounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weightId;
-    @Pattern(regexp = "^\\d*\\.?\\d+$", message = "Invalid Weight")
     private Double weight;
     private Date date;
 

@@ -3,14 +3,18 @@ package lk.ijse.workoutplanbackend.service.impl;
 import lk.ijse.workoutplanbackend.dto.ExercisesDTO;
 import lk.ijse.workoutplanbackend.dto.UserDTO;
 import lk.ijse.workoutplanbackend.entity.Exercises;
+import lk.ijse.workoutplanbackend.entity.LoginData;
 import lk.ijse.workoutplanbackend.entity.User;
 import lk.ijse.workoutplanbackend.repo.ExercisesRepository;
+import lk.ijse.workoutplanbackend.repo.LoginDataRepository;
 import lk.ijse.workoutplanbackend.repo.PlanRepository;
 import lk.ijse.workoutplanbackend.repo.UserRepository;
 import lk.ijse.workoutplanbackend.service.AdminService;
+import lk.ijse.workoutplanbackend.util.JwtUtil;
 import lk.ijse.workoutplanbackend.util.ResponseUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +32,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private PlanRepository planRepository;
+
+    @Autowired
+    private LoginDataRepository loginDataRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -99,6 +109,42 @@ public class AdminServiceImpl implements AdminService {
         List<Exercises> all = exercisesRepository.findAll();
         List<String> collect = all.stream().map(e -> e.getName()).collect(Collectors.toList());
         return new ResponseUtil(200, "Exercises Names", collect);
+    }
+
+    @Override
+    public ResponseUtil checkPassword(String password) {
+        LoginData referenceById = loginDataRepository.findById(1);
+        String username = jwtUtil.getUsernameFromToken(referenceById.getToken());
+        User admin = userRepository.getUsersByEmail(username);
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        boolean matches = passwordEncoder.matches(password, admin.getPassword());
+        if(!matches) {
+            return new ResponseUtil(401, "password incorrect" , false);
+        }
+        return new ResponseUtil(200, "matching password" , true);
+    }
+
+    @Override
+    public ResponseUtil changePassword(String newPassword) {
+        LoginData referenceById = loginDataRepository.findById(1);
+        String username = jwtUtil.getUsernameFromToken(referenceById.getToken());
+        User admin = userRepository.getUsersByEmail(username);
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        admin.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepository.save(admin);
+
+        return new ResponseUtil(200, "password changed successfully" , null);
+    }
+
+    @Override
+    public ResponseUtil getAdminEmail() {
+        LoginData referenceById = loginDataRepository.findById(1);
+        String username = jwtUtil.getUsernameFromToken(referenceById.getToken());
+
+        return new ResponseUtil(200, "userName" , username);
     }
 
 }

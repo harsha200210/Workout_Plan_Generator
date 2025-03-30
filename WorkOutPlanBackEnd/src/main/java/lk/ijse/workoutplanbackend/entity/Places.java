@@ -20,12 +20,9 @@ public class Places {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long placeId;
     @NotBlank(message = "Name is required")
-    @Pattern(regexp = "^[A-Za-z]+(?: [A-Za-z]+)*$", message = "Name must contain only letters and spaces")
     private String name;
     @NotBlank(message = "Location is required")
     private String location;
-    @NotBlank(message = "Phone Number is required")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid phone number")
     private Long tel;
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email address")

@@ -19,12 +19,9 @@ public class Trainers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trainerId;
-    @Pattern(regexp = "^[A-Za-z]+(?: [A-Za-z]+)*$", message = "Name must contain only letters and spaces")
     private String name;
     private String location;
     private String experience;
-    @NotBlank(message = "Phone Number is required")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid phone number")
     private Long tel;
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email address")

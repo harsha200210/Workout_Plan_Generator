@@ -96,4 +96,26 @@ public class AdminController {
         return adminService.getExercisesByName(name);
     }
 
+    @PostMapping("/checkPassword")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseUtil checkPassword(@Param("password") String password) {
+        System.out.println(password);
+        logger.info("Check password from AdminService");
+        return adminService.checkPassword(password);
+    }
+
+    @PutMapping("/changePassword")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseUtil changePassword(@Param("password") String password) {
+        logger.info("Change password from AdminService");
+        return adminService.changePassword(password);
+    }
+
+    @GetMapping("/getUserEmail")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseUtil getUserEmail() {
+        logger.info("Get email from AdminService");
+        return adminService.getAdminEmail();
+    }
+
 }

@@ -16,4 +16,8 @@ public interface AdminService {
     ResponseUtil deleteExercises(Long exerciseId);
     ResponseUtil getExercisesByName(String name);
     ResponseUtil getExercisesName();
+
+    ResponseUtil checkPassword(String password);
+    ResponseUtil changePassword(String newPassword);
+    ResponseUtil getAdminEmail();
 }

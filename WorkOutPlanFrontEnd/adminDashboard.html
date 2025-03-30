@@ -71,6 +71,7 @@
             <li><a class="dropdown-item text-secondary" href="#" data-bs-toggle="modal" data-bs-target="#viewModal">View</a></li>
         </ul>
     </div>
+    <a data-bs-toggle="modal" data-bs-target="#settingModal">Setting</a>
     <a onclick="logOut()">Logout</a>
 </div>
 
@@ -277,6 +278,42 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="settingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="SettingModalLabel">Change Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="userEmail" class="form-label">User Email</label>
+          <input type="text" class="form-control" id="userEmail" readonly>
+        </div>
+
+        <div class="mb-3">
+          <label for="currentPassword" class="form-label">Current Password</label>
+          <input type="password" class="form-control" id="currentPassword" placeholder="Enter Current Password">
+        </div>
+
+        <div class="mb-3" id="newPasswordDiv">
+          <label for="newPassword" class="form-label">New Password</label>
+          <input type="password" class="form-control" id="newPassword" placeholder="Enter New Password">
+        </div>
+
+        <div class="mb-3" id="conformNewPasswordDiv">
+          <label for="conformNewPassword" class="form-label">Conform Password</label>
+          <input type="password" class="form-control" id="conformNewPassword" placeholder="Enter Conform Password">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id="changePasswordBtn">Change</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -709,6 +746,99 @@
     $("#viewAllBtn").click(function () {
         loadAllExercises();
         $("#exerciseSearch2").val("");
+    })
+
+    let newPasswordDiv = $("#newPasswordDiv");
+    let changePasswordBtn = $("#changePasswordBtn");
+    let conformNewPasswordDiv = $("#conformNewPasswordDiv");
+    newPasswordDiv.hide();
+    changePasswordBtn.hide();
+    conformNewPasswordDiv.hide();
+
+    let setUserEmail = function () {
+      $.ajax({
+          url: "http://localhost:8080/api/v1/admin/getUserEmail",
+          type: "GET",
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("authToken")
+          },
+          success: function (response) {
+            if (response.statusCode === 200) {
+              $("#userEmail").val(response.data);
+            }
+          },
+          error: function (error) {
+            console.error(error);
+          }
+      });
+    }
+
+    setUserEmail();
+
+    $("#currentPassword").keypress(function (event) {
+      if (event.which === 13) {
+
+        $.ajax({
+          url: "http://localhost:8080/api/v1/admin/checkPassword",
+          type: "POST",
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("authToken")
+          },
+          data: { password: $("#currentPassword").val() },
+          success: function (response) {
+            if (response.statusCode === 200) {
+              newPasswordDiv.show();
+              changePasswordBtn.show();
+              conformNewPasswordDiv.show();
+            } else {
+              alert(response.message);
+              $("#currentPassword").val("");
+            }
+          },
+          error: function (error) {
+            console.error(error);
+          }
+        })
+
+      }
+    });
+
+    changePasswordBtn.click(function () {
+      if ($("#newPassword").val() === $("#conformNewPassword").val()) {
+        if ($("#newPassword").val() !== "") {
+
+          $.ajax({
+            url: "http://localhost:8080/api/v1/admin/changePassword",
+            type: "PUT",
+            headers: {
+              "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            data: { password: $("#newPassword").val() },
+            success: function (response) {
+              if (response.statusCode === 200) {
+                alert("Password changed successfully!");
+                newPasswordDiv.hide();
+                changePasswordBtn.hide();
+                conformNewPasswordDiv.hide();
+                $("#currentPassword").val("");
+                $("#newPassword").val("");
+                $("#conformNewPassword").val("");
+                $("#settingModal").modal("hide");
+              } else {
+                console.error(response.message);
+              }
+            },
+            error: function (error) {
+              console.error(error);
+            }
+          })
+
+        } else {
+          alert("Enter new password!!");
+        }
+      } else {
+        alert("Passwords do not match!!");
+      }
     })
 </script>
 
