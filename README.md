@@ -68,13 +68,48 @@ The **Workout Plan Generator** is a full-featured fitness planning application d
 
 ## 📸 Screenshots
 
-*(Add screenshots of user login, workout plan, admin dashboard, etc.)*
+### Main Page
+![Main Page](ss/Screenshot%202025-04-14%20124453.png)
+
+### Login Page
+![Login Page](ss/Screenshot%202025-04-14%20124516.png)
+
+### Sign Up Page
+![Sign Up Page](ss/Screenshot%202025-04-14%20124528.png)
+
+### Weight Count Section
+![Weight Count Section](ss/Screenshot%202025-04-14%20124602.png)
+
+### BMI Count Section
+![BMI Count Section](ss/Screenshot%202025-04-14%20124614.png)
+
+### Meal Plan Page
+![Meal Plan Page](ss/Screenshot%202025-04-14%20124638.png)
+
+### Workout Places Page
+![Workout Places Page](ss/Screenshot%202025-04-14%20124651.png)
+
+### Trainers Page
+![Trainers Page](ss/Screenshot%202025-04-14%20124702.png)
+
+### Schedules Page
+![Schedules Page](ss/Screenshot%202025-04-14%20124714.png)
+
+### Generate Plan Page
+![Generate Plan Page](ss/Screenshot%202025-04-14%20124741.png)
 
 ---
+
+## 📽️ Demonstration Video
+
+<a href="https://youtu.be/HL8e8BSeWxI">
+  <img src="ss/Red%20Bold%20Finance%20YouTube%20Thumbnail.png" width="200" alt="Watch the demo">
+</a>
+
 
 ## 📦 Installation
 
 1. Clone the repository  
    ```bash
-   git clone https://github.com/yourusername/workout-plan-generator.git
+   git clone https://github.com/harsha200210/Workout_Plan_Generator.git
    cd workout-plan-generator
