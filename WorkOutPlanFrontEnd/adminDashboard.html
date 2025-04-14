@@ -627,6 +627,7 @@
 
     $(document).on("click", ".search-result1", function () {
         $("#exerciseSearch1").val($(this).text());
+        $("#exerciseList1").hide();
 
         $.ajax({
             url: "http://localhost:8080/api/v1/admin/getExercise",
